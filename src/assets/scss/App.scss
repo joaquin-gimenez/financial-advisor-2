@@ -1,0 +1,181 @@
+.App {
+  text-align: center;
+}
+
+
+
+header {
+  background-color: $blue;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  margin: 0;
+
+  .App-logo {
+    position: absolute;
+    left: 0px;
+    width: 52px;
+    height: auto;
+    margin: 25px;
+    cursor: pointer;
+    img {
+      width: 52px;
+      height: auto;
+    }
+  }
+
+  h1 {
+    font-size: 55px;
+    font-weight: normal;
+    color: $darkwhite;
+  }
+}
+
+.container {
+  width: 730px;
+  margin: 0 auto;
+}
+
+.risk_level_selector {
+  .risk_level_selector {
+    display:flex;
+  }
+  .left {
+    width: 85%;
+  }
+  .right {
+    width: 15%;
+    padding-top: 20px
+  }
+
+}
+.risk_level_selector__range {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  height: 20px;
+}
+
+.risk_level_selector__levels {
+  display: flex;
+  padding: 0;
+  margin: 0;
+  li { 
+    @include button;
+    background-color: white;
+    list-style-type: none;
+    font-size: 27px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    margin: 0 2px;
+    cursor: pointer;
+    &.risk_level_selector__current {
+      background-color: $green;
+    }
+  }
+}
+
+a { 
+  @include button;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  width: 100%;
+  box-sizing: content-box;
+  text-decoration: none;
+  &:active,
+  &:hover,
+  &:focus,
+  &:visited{
+    color: $black;
+  }
+}
+
+.risk_level_list_table {
+  margin-top: 20px;
+  .highlight_row {
+    background-color: $green;
+  }
+}
+
+input,
+div.input {
+  border-radius: 5px;
+  border: 1px solid $black;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  border-color: $dark-grey;
+  border-style: solid;
+  border-width: 1 1 0 1;
+  tr { 
+    background-color: $light-grey;
+    border-bottom: 1px solid $dark-grey;
+    
+    &:nth-child(even) {
+      background-color: $white;
+    }
+    th{
+      background-color: $grey;
+      border-right: 1px solid $dark-grey;
+      padding: 5px 0;
+      font-size: 16px;
+
+      &:last-child {
+        border-width: 0;
+      }
+    }
+    td{
+      padding: 5px 5px 5px 0;
+      text-align: right;
+      border-right: 1px solid $dark-grey;
+      font-size: 16px;
+
+      &:last-child {
+        border-width: 0;
+      }
+    }
+  }
+}
+
+.portfolio {
+  input {
+    width: 95px;
+  }
+  tr {
+    td {
+      text-align: center;
+      height:31px;
+      padding: 5px 0;
+      &:first-child {
+        div {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        padding-left: 10px;
+      }
+      input{
+        height: 27px;
+      }
+      &.recommendations {
+        div.input {
+          width: calc(100% - 40px);
+          height: calc(100% - 5px);
+          margin: 0 auto;
+        }
+      }
+    }
+  }
+}
+
