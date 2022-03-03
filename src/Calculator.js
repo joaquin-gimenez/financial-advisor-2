@@ -15,6 +15,8 @@ function Calculator() {
       smallCap: null,
     });
 
+    const [triggerDataUpdate, setTriggerDataUpdate] = useState(false);
+
     function inputsPending() {
       return Object.entries(portfolio).some((entry) => {
         return !entry[1] && entry[1] !== 0;
@@ -28,17 +30,24 @@ function Calculator() {
       })
     }
 
+    function rebalance() {
+      if (!inputsPending()) {
+        setTriggerDataUpdate(!triggerDataUpdate);
+      }
+    }
+
     return (
       <div>
         <h2>Personalized Portfolio</h2>
         <h3>Risk Level {riskLevel}</h3>
         <RiskLevelDescriptionTable riskLevel={riskLevel} showRiskColumn={false} showPercentajeOnHeader={false} showPercentajeOnData={true}></RiskLevelDescriptionTable>
         <h3>Please Enter Your Current Portfolio</h3>
-        <button className="btn" disabled={inputsPending()}>Rebalance</button>
+        <button className="btn" disabled={inputsPending()} onClick={rebalance}>Rebalance</button>
         <Portfolio 
           portfolio={portfolio} 
           handleChange={handleChange}
-          inputsPending={inputsPending()}/>
+          inputsPending={inputsPending()}
+          triggerDataUpdate={triggerDataUpdate}/>
       </div>
     );
   }

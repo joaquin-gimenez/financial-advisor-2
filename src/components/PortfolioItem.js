@@ -4,6 +4,10 @@ function PortfolioItem(props) {
         return key.replace(/[A-Z]/g, ' $&')
     }
 
+    function formatDifference(number) {
+      return Math.sign(number) !== -1 ? "+" +  number : number;
+    }
+
     function handleChange(event) {
       props.handleChange(event.target.dataset.key, event.target.value);
     }
@@ -19,15 +23,21 @@ function PortfolioItem(props) {
             </div>
           </td>
           <td>
-            <input type="text" className="risk-calculator-main-difference" disabled value={props.difference ? props.difference : ""}></input>
+            <input type="text" className="risk-calculator-main-difference" disabled value={!props.inputsPending && (props.difference || props.difference === 0) ? formatDifference(props.difference) : ""}></input>
           </td>
           <td>
-            <input type="text" className="risk-calculator-main-new" disabled value={props.newAmount ? props.newAmount : ""}></input>
+            <input type="text" className="risk-calculator-main-new" disabled value={!props.inputsPending && (props.newAmount || props.newAmount === 0) ? props.newAmount : ""}></input>
           </td>
-          {props.outputTransfers === 0 &&
+          {props.outputTransfers &&
             <td className="recommendations" height="100" rowSpan="5">
               <div type="text" className="input risk-calculator-transfers">
-                {props.recommendedTransfers ? props.recommendedTransfers : ""}
+                {!props.inputsPending &&
+                    <ul>
+                    {props.recommendedTransfers ? 
+                      props.recommendedTransfers.map((message, index) => <li key={index}>{message}</li>)
+                    : ""}
+                    </ul>
+                }
               </div>
             </td>
           }
