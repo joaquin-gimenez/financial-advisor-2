@@ -10,21 +10,75 @@ function Portfolio(props) {
 
   const [localState, setLocalState] = useState({
     differences: {},
-    newAmounts: {}
+    newAmounts: {},
+    recommendedTransfers: [],
+    showErrorMessage: false
   })
 
   function updateState() {
     let newState = {
       differences: {},
-      newAmounts: {}
+      newAmounts: {},
+      recommendedTransfers: []
     };
+    // UPDATE differences and new Amounts
     Object.entries(props.portfolio).map((entry) => {
       let key = entry[0];
 
       newState.differences[key] = calculateDifference(key); 
       newState.newAmounts[key] = calculateNewAmount(key); 
+      newState.showErrorMessage = false
     })
-    setLocalState(newState);
+
+    // UPDATE recommendedTransfers
+    let recommendedTransfersMessages = [];
+  
+    let newDifferencesState = {...newState.differences}
+
+    let positiveDifferences = Object.entries(newDifferencesState)
+      .filter(entry => entry[1] > 0 )
+      .sort((entryA, entryB) =>  entryA[1] - entryB[1]);
+    let negativeDifferences = Object.entries(newDifferencesState)
+      .filter(entry => entry[1] < 0 )
+      .sort((entryA, entryB) => entryB[1] - entryA[1]);
+
+        while (positiveDifferences.length && negativeDifferences.length) {
+          for (var positiveIndex = positiveDifferences.length - 1; positiveIndex >= 0; positiveIndex--) {
+            for (var negativeIndex = negativeDifferences.length - 1; negativeIndex >= 0; negativeIndex--) {
+
+              let positiveKey = positiveDifferences[positiveIndex][0];
+              let positiveValue = positiveDifferences[positiveIndex][1];
+              
+              let negativeKey = negativeDifferences[negativeIndex][0];
+              let negativeValue = negativeDifferences[negativeIndex][1];
+              let message = "";
+
+              if (Math.abs(positiveValue) === Math.abs(negativeValue)) {
+                message = `Transfer $${roundToTwoDecimals(Math.abs(negativeValue))} from ${negativeKey} to ${positiveKey}.`;
+                positiveDifferences.splice(positiveIndex,1);
+                positiveIndex = positiveIndex - 1;
+                negativeDifferences.splice(negativeIndex,1);
+                negativeIndex = negativeIndex - 1;
+              } else if (Math.abs(positiveValue) > Math.abs(negativeValue)) {
+                message = `Transfer $${roundToTwoDecimals(Math.abs(negativeValue))} from ${negativeKey} to ${positiveKey}.`;
+                negativeDifferences.splice(negativeIndex,1);
+                negativeIndex = negativeIndex - 1;
+                
+                positiveDifferences[positiveIndex][1] = roundToTwoDecimals(positiveDifferences[positiveIndex][1] - Math.abs(negativeValue));
+              } else {
+                message = `Transfer $${roundToTwoDecimals(Math.abs(positiveValue))} from ${negativeKey} to ${positiveKey}.`;
+                positiveDifferences.splice(positiveIndex,1);
+                positiveIndex = positiveIndex - 1;
+                negativeDifferences[negativeIndex][1] = roundToTwoDecimals(negativeDifferences[negativeIndex][1] + positiveValue);
+              }
+              recommendedTransfersMessages.push(message) 
+            }
+          }
+        }
+
+        newState.recommendedTransfers = recommendedTransfersMessages;
+
+        setLocalState(newState);
   }
   
 
@@ -64,50 +118,14 @@ function Portfolio(props) {
     return roundToTwoDecimals(parseInt(currentNumber) + Number(difference));
   }
 
-  function recommendedTransfers() {
-    let newDifferencesState = {...localState.differences}
-    let recommendedTransfersMessage = [];
-
-    let positiveDifferences = Object.entries(newDifferencesState)
-      .filter(entry => entry[1] > 0 )
-      .sort((entryA, entryB) => entryB[1] - entryA[1]);
-    let negativeDifferences = Object.entries(newDifferencesState)
-      .filter(entry => entry[1] < 0 )
-      .sort((entryA, entryB) => entryA[1] - entryB[1]);
-
-        while (positiveDifferences.length && negativeDifferences.length) {
-          positiveDifferences.map((positiveEntry, positiveIndex) => {
-
-
-            negativeDifferences.map((negativeEntry, negativeIndex) => {
-              let positiveKey = positiveDifferences[positiveIndex][0];
-              let positiveValue = positiveDifferences[positiveIndex][1];
-
-
-              let negativeKey = negativeDifferences[negativeIndex][0];
-              let negativeValue = negativeDifferences[negativeIndex][1];
-              let message = "";
-
-              if (Math.abs(positiveValue) === Math.abs(negativeValue)) {
-                message = `Transfer $${roundToTwoDecimals(Math.abs(negativeValue))} from ${negativeKey} to ${positiveKey}.`;
-                positiveDifferences.splice(positiveIndex,1);
-                negativeDifferences.splice(negativeIndex,1);
-              } else if (Math.abs(positiveValue) > Math.abs(negativeValue)) {
-                message = `Transfer $${roundToTwoDecimals(Math.abs(negativeValue))} from ${negativeKey} to ${positiveKey}.`;
-                negativeDifferences.splice(negativeIndex,1);
-                positiveDifferences[positiveIndex][1] = roundToTwoDecimals(positiveDifferences[positiveIndex][1] - Math.abs(negativeValue));
-              } else {
-                message = `Transfer $${roundToTwoDecimals(Math.abs(positiveValue))} from ${negativeKey} to ${positiveKey}.`;
-                positiveDifferences.splice(positiveIndex,1);
-                negativeDifferences[positiveIndex][1] = roundToTwoDecimals(negativeDifferences[negativeIndex][1] + positiveValue);
-              }
-              recommendedTransfersMessage.push(message) 
-
-            })
-            
-          })
-        }
-        return recommendedTransfersMessage;
+  function allValuesValid() {
+    return Object.entries(props.portfolio).every((portfolio) => {
+      if (portfolio[1]) {
+        return portfolio[1].match(/^[0-9]+$/) ? true : false;
+      } else { //it's empty
+        return true;
+      }
+    })
   }
 
   function handleChange(key, value) {
@@ -115,8 +133,14 @@ function Portfolio(props) {
   }
 
   useEffect(() => {
-    if (!props.inputsPending){
+    if (!props.inputsPending && allValuesValid()){
       updateState();
+    } else if (!props.inputsPending && !allValuesValid()) {
+      setLocalState({
+        ...localState,
+        recommendedTransfers: [],
+        showErrorMessage: true
+      })
     }
   }, [props.triggerDataUpdate])
 
@@ -139,10 +163,11 @@ function Portfolio(props) {
             inputsPending: props.inputsPending,
             difference: localState.differences[key],
             newAmount: localState.newAmounts[key],
+            showErrorMessage: localState.showErrorMessage
           };
           if (index === 0) {
             attrs.outputTransfers = true
-            attrs.recommendedTransfers = recommendedTransfers();
+            attrs.recommendedTransfers = localState.recommendedTransfers;
 
           }
 

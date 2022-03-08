@@ -1,5 +1,7 @@
 function PortfolioItem(props) {
 
+    let errorMessage = "Please use only positive digits or zero when entering current amounts. Please enter all inputs correctly."
+
     function generateName(key) {
         return key.replace(/[A-Z]/g, ' $&')
     }
@@ -8,6 +10,10 @@ function PortfolioItem(props) {
       return Math.sign(number) !== -1 ? "+" +  number : number;
     }
 
+    function isNegative(number) {
+      return Math.sign(number) === -1;
+    }
+    
     function handleChange(event) {
       props.handleChange(event.target.dataset.key, event.target.value);
     }
@@ -23,20 +29,23 @@ function PortfolioItem(props) {
             </div>
           </td>
           <td>
-            <input type="text" className="risk-calculator-main-difference" disabled value={!props.inputsPending && (props.difference || props.difference === 0) ? formatDifference(props.difference) : ""}></input>
+            <input type="text" className={isNegative(props.difference) ? "risk-calculator-main-difference text-red" : "risk-calculator-main-difference text-green"} disabled value={!props.inputsPending && (props.difference || props.difference === 0) ? formatDifference(props.difference) : ""}></input>
           </td>
           <td>
-            <input type="text" className="risk-calculator-main-new" disabled value={!props.inputsPending && (props.newAmount || props.newAmount === 0) ? props.newAmount : ""}></input>
+            <input type="text" className="risk-calculator-main-new text-blue" disabled value={!props.inputsPending && (props.newAmount || props.newAmount === 0) ? props.newAmount : ""}></input>
           </td>
           {props.outputTransfers &&
             <td className="recommendations" height="100" rowSpan="5">
               <div type="text" className="input risk-calculator-transfers">
                 {!props.inputsPending &&
-                    <ul>
-                    {props.recommendedTransfers ? 
+                  props.showErrorMessage ? <p class="text-red">{errorMessage}</p> : 
+                  <ul>
+                    {
+                      props.recommendedTransfers ? 
                       props.recommendedTransfers.map((message, index) => <li key={index}>{message}</li>)
-                    : ""}
-                    </ul>
+                      : ""
+                    }
+                  </ul>
                 }
               </div>
             </td>
