@@ -13,6 +13,12 @@ function RiskLevelSelector() {
         dispatch(selectRiskLevel(parseInt(e.target.dataset.key)))
     };
 
+    function handleClick(e) {
+        if (!riskLevel) {
+            e.preventDefault();
+        }
+    }
+
   return (
     <div className="risk_level_selector">
         <h2>Please Select A Risk Level For Your Investment Portfolio</h2>
@@ -31,7 +37,7 @@ function RiskLevelSelector() {
             </ul>
         </div>
         <div className="right">
-            <Link to="/calculator" className="btn">Continue</Link>
+            <Link to="/calculator" onClick={handleClick} className={"btn " + (!riskLevel ? "disabled" : "")}>Continue</Link>
         </div>
         </div>
     </div>

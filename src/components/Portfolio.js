@@ -145,7 +145,7 @@ function Portfolio(props) {
   }, [props.triggerDataUpdate])
 
   return (
-    <table className="portfolio">
+    <table className="portfolio no-internal-borders">
       <thead>
         <tr>
           <th>Current Amount</th>

@@ -1,8 +1,34 @@
+body {
+  background-color: $bg-grey;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-green {
+  color: $textGreen;
+}
+.text-red {
+  color: $textRed;
+}
+.text-blue {
+  color: $textBlue;
+}
+
 .App {
   text-align: center;
 }
 
-
+.btn {
+  @include button;
+  background-color: $light-blue;
+  padding: 8px 8px;
+  &:disabled,
+  &.disabled {
+    opacity: 0.4;
+  }
+}
 
 header {
   background-color: $blue;
@@ -22,6 +48,7 @@ header {
     height: auto;
     margin: 25px;
     cursor: pointer;
+    border: 0;
     img {
       width: 52px;
       height: auto;
@@ -49,7 +76,23 @@ header {
   }
   .right {
     width: 15%;
-    padding-top: 20px
+    padding-top: 20px;
+    a { 
+      @include button;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      box-sizing: content-box;
+      text-decoration: none;
+      &:active,
+      &:hover,
+      &:focus,
+      &:visited{
+        color: $black;
+      }
+    }
   }
 
 }
@@ -66,9 +109,11 @@ header {
   margin: 0;
   li { 
     @include button;
+    height: 56px;
     background-color: white;
     list-style-type: none;
     font-size: 27px;
+    font-weight: 500;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -81,22 +126,7 @@ header {
   }
 }
 
-a { 
-  @include button;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: transparent;
-  width: 100%;
-  box-sizing: content-box;
-  text-decoration: none;
-  &:active,
-  &:hover,
-  &:focus,
-  &:visited{
-    color: $black;
-  }
-}
+
 
 .risk_level_list_table {
   margin-top: 20px;
@@ -117,7 +147,7 @@ table {
   border-spacing: 0;
   border-color: $dark-grey;
   border-style: solid;
-  border-width: 1 1 0 1;
+  border-width: 1px 1px 0 1px;
   tr { 
     background-color: $light-grey;
     border-bottom: 1px solid $dark-grey;
@@ -146,6 +176,21 @@ table {
       }
     }
   }
+  &.no-internal-borders {
+    tr {
+      border-bottom-width: 0;
+      background-color: $white;
+      th,
+      td {
+        border-right-width: 0;
+      }
+    }
+    thead {
+      tr {
+        border-bottom-width: 1px;
+      }
+    }
+  }
 }
 
 .portfolio {
@@ -170,22 +215,37 @@ table {
       }
       &.recommendations {
         div.input {
-          width: calc(100% - 40px);
+          width: 170px;
           height: calc(100% - 5px);
           margin: 0 auto;
         }
         .risk-calculator-transfers {
+          p, li {
+            font-size: 14px;
+            text-align: left;
+            padding-left: 5px;
+          }
           ul {
             padding-left: 20px;
             li {
-              text-align: left;
               margin: 5px 0;
-              font-size: 14px;
             }
           }
         }
       }
     }
   }
+  .risk-calculator-main-input,
+  .risk-calculator-main-difference,
+  .risk-calculator-main-new {
+    text-align: right;
+    padding-right: 5px;
+  }
+}
+
+.rebalance_button_wrapper {
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
 }
 

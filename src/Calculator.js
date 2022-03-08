@@ -39,10 +39,12 @@ function Calculator() {
     return (
       <div>
         <h2>Personalized Portfolio</h2>
-        <h3>Risk Level {riskLevel}</h3>
+        <h3 className="text-left">Risk Level {riskLevel}</h3>
         <RiskLevelDescriptionTable riskLevel={riskLevel} showRiskColumn={false} showPercentajeOnHeader={false} showPercentajeOnData={true}></RiskLevelDescriptionTable>
-        <h3>Please Enter Your Current Portfolio</h3>
-        <button className="btn" disabled={inputsPending()} onClick={rebalance}>Rebalance</button>
+        <div className="rebalance_button_wrapper">
+          <h3>Please Enter Your Current Portfolio</h3>
+          <button className="btn" disabled={inputsPending()} onClick={rebalance}>Rebalance</button>
+        </div>
         <Portfolio 
           portfolio={portfolio} 
           handleChange={handleChange}
