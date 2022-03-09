@@ -127,12 +127,15 @@ header {
 }
 
 
-
-.risk_level_list_table {
+.risk_level_list_table_wrapper {
+  display: flex;
   margin-top: 20px;
-  .highlight_row {
-    background-color: $green;
-  }
+  .risk_level_list_table {
+    flex-grow: 1;
+    .highlight_row {
+      background-color: $green;
+    }
+  }  
 }
 
 input,
@@ -249,3 +252,14 @@ table {
   align-items: center;
 }
 
+#view-logo {
+  display: contents;
+  img {
+    height: 50px;
+    width: 55px;
+    border: 3px solid $black;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 10px;
+  }
+}

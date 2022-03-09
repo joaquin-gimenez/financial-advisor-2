@@ -1,19 +1,14 @@
+
+import {formatPortfolioName, isNegative} from '../Helpers';
+
+function formatDifference(number) {
+  return Math.sign(number) !== -1 ? "+" +  number : number;
+}
+
+let errorMessage = "Please use only positive digits or zero when entering current amounts. Please enter all inputs correctly."
+
 function PortfolioItem(props) {
 
-    let errorMessage = "Please use only positive digits or zero when entering current amounts. Please enter all inputs correctly."
-
-    function generateName(key) {
-        return key.replace(/[A-Z]/g, ' $&')
-    }
-
-    function formatDifference(number) {
-      return Math.sign(number) !== -1 ? "+" +  number : number;
-    }
-
-    function isNegative(number) {
-      return Math.sign(number) === -1;
-    }
-    
     function handleChange(event) {
       props.handleChange(event.target.dataset.key, event.target.value);
     }
@@ -22,7 +17,7 @@ function PortfolioItem(props) {
       <tr key={props.keyName}>
           <td>
             <div>
-              <span>{generateName(props.keyName)} $:</span>
+              <span>{formatPortfolioName(props.keyName)} $:</span>
               <span>
                 <input type="text" className="risk-calculator-main-input" data-key={props.keyName} value={props.value ? props.value : ""} onChange={handleChange}></input>
               </span>
