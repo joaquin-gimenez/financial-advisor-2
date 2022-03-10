@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import PortfolioItem from './PortfolioItem';
+import { roundToTwoDecimals } from '../Helpers';
 
 function Portfolio(props) {
 
@@ -88,10 +89,6 @@ function Portfolio(props) {
         return entry[1];
       })
       .reduce((prev, current) => prev + (current ? parseInt(current) : 0), 0);
-  }
-
-  function roundToTwoDecimals(number) {
-    return Math.round(number * 100) / 100
   }
 
   function calculateDifference(key) {

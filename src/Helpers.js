@@ -7,3 +7,7 @@ export function formatPortfolioName(key) {
 export function isNegative(number) {
     return Math.sign(number) === -1;
 }
+
+export function roundToTwoDecimals(number) {
+    return Math.round(number * 100) / 100
+}

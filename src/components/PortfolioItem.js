@@ -19,7 +19,7 @@ function PortfolioItem(props) {
             <div>
               <span>{formatPortfolioName(props.keyName)} $:</span>
               <span>
-                <input type="text" className="risk-calculator-main-input" data-key={props.keyName} value={props.value ? props.value : ""} onChange={handleChange}></input>
+                <input type="text" className="risk-calculator-main-input input--highlighted" data-key={props.keyName} value={props.value ? props.value : ""} onChange={handleChange}></input>
               </span>
             </div>
           </td>

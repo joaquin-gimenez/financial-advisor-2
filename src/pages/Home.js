@@ -1,6 +1,6 @@
 
-import RiskLevelSelector from './components/RiskLevelSelector'
-import RiskLevelDescription from './components/RiskLevelDescription'
+import RiskLevelSelector from '../components/RiskLevelSelector'
+import RiskLevelDescription from '../components/RiskLevelDescription'
  
 
 function Home() {

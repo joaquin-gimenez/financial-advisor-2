@@ -5,8 +5,8 @@ import { Provider } from 'react-redux';
 import './assets/scss/index.scss';
 
 import Header from './layouts/Header'
-import Home from './Home'
-import Calculator from './Calculator'
+import Home from './pages/Home'
+import Calculator from './pages/Calculator'
 
 import store from './Store'
 

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import RiskLevelDescriptionTable from './components/RiskLevelDescriptionTable';
-import Portfolio from './components/Portfolio';
+import RiskLevelDescriptionTable from '../components/RiskLevelDescriptionTable';
+import Portfolio from '../components/Portfolio';
 
 function Calculator() {
     const riskLevel = useSelector((state) => state.riskLevel.level)

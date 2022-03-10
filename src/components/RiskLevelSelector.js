@@ -23,22 +23,22 @@ function RiskLevelSelector() {
     <div className="risk_level_selector">
         <h2>Please Select A Risk Level For Your Investment Portfolio</h2>
         <div className="risk_level_selector">
-        <div className="left">
-            <div className="risk_level_selector__range">
-                <span>Low</span>
-                <span>High</span>
+            <div className="left">
+                <div className="risk_level_selector__range">
+                    <span>Low</span>
+                    <span>High</span>
+                </div>
+                <ul className="risk_level_selector__levels">
+                    {Array(10).fill(1).map((el, i) => {
+                            let key = i + 1;
+                            return <li className={riskLevel === key ? "risk_level_selector__current" : ""} onClick={updateRiskLevel} key={key} data-key={key}>{key}</li>
+                        }
+                    )}
+                </ul>
             </div>
-            <ul className="risk_level_selector__levels">
-                 {Array(10).fill(1).map((el, i) => {
-                        let key = i + 1;
-                        return <li className={riskLevel === key ? "risk_level_selector__current" : ""} onClick={updateRiskLevel} key={key} data-key={key}>{key}</li>
-                    }
-                )}
-            </ul>
-        </div>
-        <div className="right">
-            <Link to="/calculator" onClick={handleClick} className={"btn " + (!riskLevel ? "disabled" : "")}>Continue</Link>
-        </div>
+            <div className="right">
+                <Link to="/calculator" onClick={handleClick} className={"btn " + (!riskLevel ? "disabled" : "")}>Continue</Link>
+            </div>
         </div>
     </div>
   );

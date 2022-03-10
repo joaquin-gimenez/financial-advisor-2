@@ -1,6 +1,5 @@
 const initialState = {
     level: null,
-    page: 'home',
     riskLevels: [
         {
             level: 1,
