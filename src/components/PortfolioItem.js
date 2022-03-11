@@ -33,7 +33,7 @@ function PortfolioItem(props) {
             <td className="recommendations" height="100" rowSpan="5">
               <div type="text" className="input risk-calculator-transfers">
                 {!props.inputsPending &&
-                  props.showErrorMessage ? <p class="text-red">{errorMessage}</p> : 
+                  props.showErrorMessage ? <p className="text-red">{errorMessage}</p> : 
                   <ul>
                     {
                       props.recommendedTransfers ? 

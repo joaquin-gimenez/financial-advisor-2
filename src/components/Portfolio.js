@@ -9,32 +9,54 @@ function Portfolio(props) {
   const riskLevels = useSelector((state) => state.riskLevel.riskLevels);
   const currentLevel = useSelector((state) => state.riskLevel.level);
 
-  const [localState, setLocalState] = useState({
-    differences: {},
-    newAmounts: {},
-    recommendedTransfers: [],
-    showErrorMessage: false
-  })
+  const [differencesState, setDifferencesState] = useState({})
+  const [newAmountsState, setNewAmountsState] = useState({})
+  const [recommendedTransfersState, setRecommendedTransfersState] = useState([])
+  const [showErrorMessageState, setShowErrorMessageState] = useState(false)
+
+
 
   function updateState() {
-    let newState = {
-      differences: {},
-      newAmounts: {},
-      recommendedTransfers: []
-    };
-    // UPDATE differences and new Amounts
+    const newDifferences = updateDifference(differencesState);
+    setDifferencesState({...newDifferences}); 
+    setNewAmountsState({...updateNewAmount(newAmountsState)}); 
+    setRecommendedTransfersState([...updateRecomendedTransfers(newDifferences)]);
+    setShowErrorMessageState(false);
+  }
+
+  function updateDifference(differences) {
+    let differenceCopy = {...differences}
+
     Object.entries(props.portfolio).map((entry) => {
       let key = entry[0];
 
-      newState.differences[key] = calculateDifference(key); 
-      newState.newAmounts[key] = calculateNewAmount(key); 
-      newState.showErrorMessage = false
+      differenceCopy = {
+        ...differenceCopy,
+        [key]: calculateDifference(key)
+      }; 
     })
+    return differenceCopy; 
+  }
 
-    // UPDATE recommendedTransfers
+  function updateNewAmount(newAmounts) {
+    let newAmountCopy = {...newAmounts}
+
+    Object.entries(props.portfolio).map((entry) => {
+      let key = entry[0];
+
+      newAmountCopy = {
+        ...newAmountCopy,
+        [key]: calculateNewAmount(key)
+      }; 
+    })
+    return newAmountCopy; 
+  }
+
+
+  function updateRecomendedTransfers(differences) {
     let recommendedTransfersMessages = [];
   
-    let newDifferencesState = {...newState.differences}
+    let newDifferencesState = {...differences}
 
     let positiveDifferences = Object.entries(newDifferencesState)
       .filter(entry => entry[1] > 0 )
@@ -77,9 +99,7 @@ function Portfolio(props) {
           }
         }
 
-        newState.recommendedTransfers = recommendedTransfersMessages;
-
-        setLocalState(newState);
+        return recommendedTransfersMessages;
   }
   
 
@@ -118,7 +138,7 @@ function Portfolio(props) {
   function allValuesValid() {
     return Object.entries(props.portfolio).every((portfolio) => {
       if (portfolio[1]) {
-        return portfolio[1].match(/^[0-9]+$/) ? true : false;
+        return portfolio[1].match(/^[0-9]+$/);
       } else { //it's empty
         return true;
       }
@@ -133,11 +153,8 @@ function Portfolio(props) {
     if (!props.inputsPending && allValuesValid()){
       updateState();
     } else if (!props.inputsPending && !allValuesValid()) {
-      setLocalState({
-        ...localState,
-        recommendedTransfers: [],
-        showErrorMessage: true
-      })
+      setRecommendedTransfersState([]);
+      setShowErrorMessageState(true);
     }
   }, [props.triggerDataUpdate])
 
@@ -158,14 +175,13 @@ function Portfolio(props) {
           
           let attrs = {
             inputsPending: props.inputsPending,
-            difference: localState.differences[key],
-            newAmount: localState.newAmounts[key],
-            showErrorMessage: localState.showErrorMessage
+            difference: differencesState[key],
+            newAmount: newAmountsState[key],
+            showErrorMessage: showErrorMessageState
           };
           if (index === 0) {
             attrs.outputTransfers = true
-            attrs.recommendedTransfers = localState.recommendedTransfers;
-
+            attrs.recommendedTransfers = recommendedTransfersState;
           }
 
           return <PortfolioItem key={key} keyName={key} value={value} handleChange={handleChange} {...attrs} />
